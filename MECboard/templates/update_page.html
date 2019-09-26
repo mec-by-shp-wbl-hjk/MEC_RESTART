@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Gesipan update</title>
+<script>
+function home(){
+	location.href="/";
+}
+function del(){
+	if(confirm("삭제하시겠습니까?")){
+	document.form1.action="delete";
+	document.form1.submit();
+	}
+}
+function update(){
+	if (document.form1.title.value==""){
+		alert("제목를 입력하세요.");
+		document.form1.title.focus();
+		return;
+	}
+	if (document.form1.content.value==""){
+		alert("내용을 입력하세요.");
+		document.form1.content.focus();
+		return;
+	}
+	document.form1.action="update";
+	document.form1.submit();
+}
+</script>
+</head>
+<body>
+<h2>게시물 편집</h2>
+<form method="post" name="form1" enctype="multipart/form-data">
+<table border="1" width="700px">
+	<tr>
+		<td>글쓴이 : </td><td>{{username}}<input type="hidden" name="writer" value="{{username}}"></td>
+	</tr>
+	<tr>
+		<td>제  목 : </td><td><input type="text" name="title" size="80" placeholder="제목을 입력하세요" value="{{dto.title}}"></td>
+	</tr>
+	<tr>
+		<td>내  용 : </td><td><textarea rows="20" cols="82" name="content" placeholder="내용을 입력하세요">{{dto.content}}</textarea></td>
+	</tr>
+	<tr>
+		<td>첨부파일</td>
+		<td>
+			{% if dto.filesize > 0 %}
+			<a href="download?idx={{dto.idx}}">{{dto.filename}}</a>
+			( {{filesize}}KB)
+			{% endif %}
+			<input type="file" name="file" accept="image/*"></td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center">
+				<input type="hidden" name="rating" value="{{dto.rating}}">
+				<input type="hidden" name="ratings_up" value="{{dto.ratings_up}}">
+				<input type="hidden" name="ratings_down" value="{{dto.ratings_down}}">
+				<input type="hidden" name="idx" value="{{dto.idx}}">
+				<input type="hidden" name="hit" value="{{dto.hit}}">
+				<input type="hidden" name="username" value="{{username}}">
+				<input type="hidden" name="is_authenticated" value="{{is_authenticated}}">
+				<input type="button" value="목록" onclick="home()">
+				<input type="button" value="수정" onclick="update()">
+				<input type="button" value="삭제" onclick="del()">
+			</td>
+		</tr>
+</table>
+</form>
+
+</body>
+</html>
