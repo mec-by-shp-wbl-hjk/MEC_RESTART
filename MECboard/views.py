@@ -16,7 +16,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import accuracy_score
 
-UPLOAD_DIR = "C:/Users/sehwa/PycharmProjects/MEC/MECboard/media/images"
+UPLOAD_DIR = "C:/Users/John/Documents/GitHub/MEC_RESTART/MECboard/media/images"
 login_failure = False
 
 @csrf_exempt
