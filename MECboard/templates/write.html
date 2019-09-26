@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Gesipan write</title>
+<script>
+function home(){
+	location.href="/";
+}
+function write1(){
+	if (document.form1.title.value==""){
+		alert("제목를 입력하세요.");
+		document.form1.title.focus();
+		return;
+	}
+	if (document.form1.content.value==""){
+		alert("내용을 입력하세요.");
+		document.form1.content.focus();
+		return;
+	}
+	document.form1.submit();
+}
+</script>
+</head>
+<body>
+<h2>글쓰기</h2>
+<form id=form1 name="form1" method="post" action="insert" enctype="multipart/form-data">
+{% csrf_token %}
+<table border="1" width="700px">
+	<tr>
+		<td>글쓴이 : </td><td>{{username}}<input type="hidden" name="writer" value="{{username}}"></td>
+	</tr>
+	<tr>
+		<td>제  목 : </td><td><input type="text" name="title" size="80" placeholder="제목을 입력하세요"></td>
+	</tr>
+	<tr>
+		<td>내  용 : </td><td><textarea rows="20" cols="82" name="content" placeholder="내용을 입력하세요"></textarea></td>
+	</tr>
+	<tr>
+		<td>첨부파일 </td><td><input type="file" name="file" accept="image/*"></td>
+	</tr>
+	<tr>
+		<td>썸네일 </td><td><input type="file" name="thumbnail" accept="image/*"></td>
+	</tr>
+	<tr>
+		<td colspan="2" align="center">
+			<input type="hidden" name="username" value="{{username}}">
+			<input type="hidden" name="is_authenticated" value="{{is_authenticated}}">
+            <button type="button" onclick="write1()" id="btnSave">글 쓰기</button>
+			<input type="button" value="목록" onclick="home()">
+		</td>
+	</tr>
+</table>
+</form>
+</body>
+</html>

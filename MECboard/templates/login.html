@@ -1,0 +1,73 @@
+﻿{% load socialaccount %}
+{% providers_media_js %}
+<!DOCTYPE html>
+<!--<html>
+<head>
+<meta charset="UTF-8">
+<title>Gesipan Login</title>
+<script>
+function check(){
+	if (document.form1.username.value==""){
+		alert("아이디를 입력하세요.");
+		document.form1.username.focus();
+		return;
+	}
+	if (document.form1.password.value==""){
+		alert("비밀번호를 입력하세요.");
+		document.form1.password.focus();
+		return;
+	}
+	document.form1.submit();
+}
+</script>
+</head>
+<body>
+<!--<script>
+if ("{{msg}}" == "no error");
+else
+	alert("Login Error");
+
+</script>
+<h2>로그인</h2>
+<form method="post" name="form1" action="{% url 'login' %}">
+{% csrf_token %}
+<table>
+	<tr>
+		<td>ID</td>
+		<td><input id="{{form.username.id_for_label}}" maxlength="15"
+			name="{{form.username.html_name}}">
+		</td>
+	</tr>
+	<tr>
+		<td>PWD</td>
+		<td><input id="{{form.password.id_for_label}}" maxlength="120"
+			name="{{form.password.html_name}}" type="password">
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2" align="center">
+			<input type="button" value="로그인" onclick="check()">
+			<input type="button" value="취소" onclick="location.href='/';">
+		</td>
+	</tr>
+</table>
+</form>
+</body>
+</html>-->
+<title>Gesipan Login</title>
+
+{% if user.is_authenticated %}
+<a href="/">이미 로그인 되어있습니다.</a>
+<br>
+{{user.username}} 님이 로그인 중
+{% else %}
+<a href="/accounts/login">로그인</a>
+<br>
+<a href="/accounts/signup">회원가입</a>
+<br>
+또는 자주 사용하는 SNS로 로그인하세요.
+<br>
+<a href="{% provider_login_url 'google' %}">Google</a>
+<a href="{% provider_login_url 'facebook' %}">Facebook</a>
+<a href="{% provider_login_url 'kakao' %}">Kakao</a>
+{% endif %}

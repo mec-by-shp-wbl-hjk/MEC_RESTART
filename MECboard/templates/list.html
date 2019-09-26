@@ -1,0 +1,116 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Gesipan</title>
+<script>
+function write_identified(){
+	if ("{{is_authenticated}}" == "True")
+		location.href="write";
+	else
+		alert("로그인이 필요합니다.");
+}
+</script>
+<style>
+a:link {color:black; text-decoration:none;}
+a:visited {color:black; text-decoration:none;}
+a:hover {color: blue;}
+</style>
+</head>
+<body>
+<script>
+if ("{{login_failed}}" == "True")
+	alert("로그인에 실패하였습니다.");
+</script>
+<h2><a href="/">게시판</a></h2>
+{% if is_authenticated %}
+	안녕하십니까 {{username}}님<br>
+	<a href="/accounts/logout">로그아웃</a>
+{% else %}
+	안녕하십니까 {{username}}님<br>
+	<span style="color:red">로그인하십시오</span>
+	<a href="/login">로그인</a>
+	<!--<a href="/join">회원가입</a>-->
+{% endif %}<br>
+<form method="post">
+{% csrf_token %}
+<select name="search_option">
+{% if search_option == "writer" %}
+	<option value="writer" selected>이름</option>
+	<option value="title">제목</option>
+	<option value="content">내용</option>
+	<option value="all">이름+제목+내용</option>
+{% elif search_option == "title" %}
+	<option value="writer">이름</option>
+	<option value="title" selected>제목</option>
+	<option value="content">내용</option>
+	<option value="all">이름+제목+내용</option>
+{% elif search_option == "content" %}
+	<option value="writer">이름</option>
+	<option value="title">제목</option>
+	<option value="content" selected>내용</option>
+	<option value="all">이름+제목+내용</option>
+{% elif search_option == "all" %}
+	<option value="writer">이름</option>
+	<option value="title">제목</option>
+	<option value="content">내용</option>
+	<option value="all" selected>이름+제목+내용</option>
+{% endif %}
+</select>
+<input type="text" name="search" value="{{search}}">
+<input type="submit" value="검색">
+</form>
+게시물수 : {{boardCount}} <br>
+<input type="button" value="글쓰기" onclick="write_identified()">
+<table border="1">
+	<tr>
+		<th>번호</th>
+		<th>게시자</th>
+		<th>제목</th>
+		<th>조회수</th>
+	</tr>
+	{% for row in boardList %}
+	<tr>
+		<th>유효 일자:{{row.post_date}}</th>
+	</tr>
+	<tr>
+		<td><div style="text-align:center;">{{row.idx}}</div></td>
+		<td><div style="width:100px;text-align:center;">{{row.writer}}</div></td>
+		{% if row.image_thumbnail %}
+		<td><div style="text-align:center;">&nbsp;&nbsp;<a href="detail?idx={{row.idx}}&username={{username}}&is_authenticated={{is_authenticated}}">{{row.title}}
+			<img src="{{row.image_thumbnail.url}}"></a></div></td>
+		{% else %}
+		<td><div style="width:240px;height:180px;text-align:center;">&nbsp;&nbsp;<a href="detail?idx={{row.idx}}&username={{username}}&is_authenticated={{is_authenticated}}">{{row.title}}</a></div></td>
+		{% endif %}
+		<td>{{row.hit}}</td>
+		<td>{{row.rating}}</td>
+
+		<td>
+			{% if row.filesize > 0 %}
+			<a href="download?idx={{row.idx}}">
+				{% load staticfiles %}
+				<img src="{% static 'images/file.gif' %}"></a>
+			{% endif %}
+		</td>
+		<td>{{row.down}}</td>
+	</tr>
+	{% endfor %}
+	<tr>
+		<td colspan="7" align="center">
+			{% if start_page >= page_list_size %}
+				<a href="?start={{prev_list}}">[이전]</a>
+			{% endif %}
+			{% autoescape off %}
+				{% for link in links %}
+					{{link}}
+				{% endfor %}
+			{% endautoescape %}
+			{% if total_page > end_page %}
+				<a href="?start={{next_list}}">[다음]</a>	
+			{% endif %}
+		</td>
+	</tr>
+</table>
+</body>
+</html>
